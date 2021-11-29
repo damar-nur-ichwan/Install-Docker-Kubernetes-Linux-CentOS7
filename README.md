@@ -92,7 +92,7 @@ Note: make sure you are on root
   && ifup enp0s3
 ```
 ### *Open CMD*
-## 8. Install Flannel & Get Kubeadm Join Token - Master Node
+## 8. Install Flannel - Master Node
 ```
   sudo cp /etc/kubernetes/admin.conf $HOME/ \
   && sudo chown $(id -u):$(id -g) $HOME/admin.conf \
@@ -103,12 +103,36 @@ Note: make sure you are on root
   && kubectl get pods -A \
   && kubeadm token create --print-join-command
   && kubectl get pod -A
+  ```
+check:
+```
+kubectl get pod -A
+```
+## 9. Install Prometheus, Kube State Metrics,  Grafana, & Node Exporter - Master Node
+```
+yum install git -y \
+&& rm -rf kubernetes-* \
+&& git clone https://github.com/bibinwilson/kubernetes-node-exporter \
+&& git clone https://github.com/devopscube/kube-state-metrics-configs.git \
+&& git clone https://github.com/bibinwilson/kubernetes-prometheus \
+&& git clone https://github.com/bibinwilson/kubernetes-grafana.git \
+&& kubectl create namespace monitoring \
+&& kubectl apply -f kubernetes-node-exporter/ \
+&& kubectl apply -f kube-state-metrics-configs/ \
+&& kubectl create -f kubernetes-prometheus/clusterRole.yaml \
+&& kubectl create -f kubernetes-prometheus/config-map.yaml \
+&& kubectl create  -f kubernetes-prometheus/prometheus-deployment.yaml \
+&& kubectl create -f kubernetes-prometheus/prometheus-service.yaml --namespace=monitoring \
+&& kubectl create -f kubernetes-grafana/grafana-datasource-config.yaml \
+&& kubectl create -f kubernetes-grafana/deployment.yaml \
+&& kubectl create -f kubernetes-grafana/service.yaml
+```
 ```
 check:
 ```
 kubectl get pod -A
 ```
-## 9. Copy and Paste Kubadm Join Token from Master Node - Worker Nodes
+## 10. Copy and Paste Kubadm Join Token from Master Node - Worker Nodes
 *copy from master node*
 ```
 kubeadm token create --print-join-command
@@ -117,23 +141,4 @@ kubeadm token create --print-join-command
 contoh:
 ```
 kubeadm join 192.168.1.26:6443 --token a1atea.qf2itw3jxdo4jkzd --discovery-token-ca-cert-hash sha256:15cd536ceb9c4c3d4ea46d1a9bcd7816e45fbc3e58a6afec176d33a2ae9a865a
-```
-
-## 10. Install Prometheus, Kube State Metrics,  Grafana, & Node Exporter - Master Node
-```
-yum install git -y \
-&& rm -rf kubernetes-* \
-&& git clone https://github.com/bibinwilson/kubernetes-node-exporter \
-&& git clone https://github.com/bibinwilson/kubernetes-prometheus \
-&& git clone https://github.com/bibinwilson/kubernetes-grafana.git \
-&& kubectl create namespace monitoring \
-&& kubectl create -f kubernetes-node-exporter/daemonset.yaml \
-&& kubectl create -f kubernetes-node-exporter/service.yaml \
-&& kubectl create -f kubernetes-prometheus/clusterRole.yaml \
-&& kubectl create -f kubernetes-prometheus/config-map.yaml \
-&& kubectl create  -f kubernetes-prometheus/prometheus-deployment.yaml \
-&& kubectl create -f kubernetes-prometheus/prometheus-service.yaml --namespace=monitoring \
-&& kubectl create -f kubernetes-grafana/grafana-datasource-config.yaml \
-&& kubectl create -f kubernetes-grafana/deployment.yaml \
-&& kubectl create -f kubernetes-grafana/service.yaml
 ```
