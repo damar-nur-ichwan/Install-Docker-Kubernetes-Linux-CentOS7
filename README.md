@@ -102,8 +102,18 @@ Note: make sure you are on root
   && kubectl get nodes \
   && kubectl get pods -A \
   && kubeadm token create --print-join-command
+  && kubectl get pod -A
+```
+check:
+```
+kubectl get pod -A
 ```
 ## 9. Copy and Paste Kubadm Join Token from Master Node - Worker Nodes
+*copy from master node*
+```
+kubeadm token create --print-join-command
+```
+*paste ke worker node*
 contoh:
 ```
 kubeadm join 192.168.1.26:6443 --token a1atea.qf2itw3jxdo4jkzd --discovery-token-ca-cert-hash sha256:15cd536ceb9c4c3d4ea46d1a9bcd7816e45fbc3e58a6afec176d33a2ae9a865a
