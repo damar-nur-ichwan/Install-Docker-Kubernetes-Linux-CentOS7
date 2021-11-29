@@ -67,6 +67,12 @@ sysctl --system \
 ```
 ## 5. Add DNS Name - ALL Nodes
 ```
+ifdown enp0s3 & ifup enp0s3
+```
+```
+ip a
+```
+```
 vi /etc/hosts
 ```
 
