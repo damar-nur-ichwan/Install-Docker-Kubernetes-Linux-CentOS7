@@ -2,6 +2,15 @@
 
 Note: make sure you are on root
 ### *Open CMD*
+## 0. Set Date & Time - All Nodes
+```
+systemctl stop chronyd \
+&& systemctl disable chronyd \
+&& yum install -y ntp \
+&& ntpdate -u id.pool.ntp.org \
+&& service ntpd start \
+&& timedatectl set-timezone "Asia/Jakarta"
+```
 ## 1. Install Docker - All Nodes
 ```
 yum remove docker* -y \
@@ -46,12 +55,12 @@ sysctl --system \
 && sed -i '/swap/d' /etc/fstab \
 && swapoff -a
 ```
-## 3. Set Hostname && View IP enp0s8 - Master Nodes
+## 3. Set Hostname && View IP enp0s8 - Master Node
 ```
   hostnamectl set-hostname master \
   && ip a
 ```
-## 4. Set Hostname && View IP enp0s8 - Worker Nodes
+## 4. Set Hostname && View IP enp0s8 - Worker Node
 ```
   hostnamectl set-hostname worker1 \
   && ip a
@@ -75,24 +84,24 @@ than press ESC ```:wq```
 
 ### *Open VM DEKSTOP*
 Note: make sure you are on root
-## 6. Init Kubernetes Master - Master Nodes
+## 6. Init Kubernetes Master - Master Node
 ```
   ifdown enp0s3 \
   && kubeadm init --pod-network-cidr=10.244.0.0/16 \
   && ifup enp0s3
 ```
 ### *Open CMD*
-## 7. Install Flannel & Get Kubeadm Join Token - Master Nodes
+## 7. Install Flannel & Get Kubeadm Join Token - Master Node
 ```
   sudo cp /etc/kubernetes/admin.conf $HOME/ \
   && sudo chown $(id -u):$(id -g) $HOME/admin.conf \
   && export KUBECONFIG=$HOME/admin.conf \
   && kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml \
   && kubectl get nodes \
-  && kubectl get pods -A
+  && kubectl get pods -A \
   && kubeadm token create --print-join-command
 ```
-## 8. Copy and Paste Kubadm Join Token from Master Nodes - Worker Nodes
+## 8. Copy and Paste Kubadm Join Token from Master Node - Worker Nodes
 
 ```
 kubeadm reset -y
@@ -100,4 +109,20 @@ kubeadm reset -y
 example:
 ```
 kubeadm join 192.168.1.26:6443 --token a1atea.qf2itw3jxdo4jkzd --discovery-token-ca-cert-hash sha256:15cd536ceb9c4c3d4ea46d1a9bcd7816e45fbc3e58a6afec176d33a2ae9a865a
+```
+
+## 9. Install Prometheus, Kube State Metrics,  Grafana, & Node Exporter - Master Node
+clone
+```
+yum install git -y \
+&& git clone https://github.com/bibinwilson/kubernetes-prometheus \
+&& git clone https://github.com/bibinwilson/kubernetes-grafana.git \
+&& git clone https://github.com/bibinwilson/kubernetes-node-exporter \
+&& kubectl create namespace monitoring \
+&& kubectl create -f kubernetes-prometheus/clusterRole.yaml \
+&& kubectl create -f kubernetes-prometheus/config-map.yaml \
+&& kubectl create  -f kubernetes-prometheus/prometheus-deployment.yaml \
+&& kubectl create -f kubernetes-prometheus/prometheus-service.yaml --namespace=monitoring \
+&& kubectl apply -f kubernetes-grafana/ \
+&& kubectl apply -f kubernetes-node-exporter/
 ```
