@@ -104,9 +104,9 @@ Note: make sure you are on root
 ## 8. Copy and Paste Kubadm Join Token from Master Node - Worker Nodes
 
 ```
-kubeadm reset -y
+kubeadm reset
 ```
-example:
+contoh:
 ```
 kubeadm join 192.168.1.26:6443 --token a1atea.qf2itw3jxdo4jkzd --discovery-token-ca-cert-hash sha256:15cd536ceb9c4c3d4ea46d1a9bcd7816e45fbc3e58a6afec176d33a2ae9a865a
 ```
@@ -118,10 +118,13 @@ yum install git -y \
 && git clone https://github.com/bibinwilson/kubernetes-prometheus \
 && git clone https://github.com/bibinwilson/kubernetes-grafana.git \
 && kubectl create namespace monitoring \
-&& kubectl apply -f kubernetes-node-exporter/ \
-&& kubectl apply -f kubernetes-grafana/ \
+&& kubectl create -f kubernetes-node-exporter/daemonset.yaml \
+&& kubectl create -f kubernetes-node-exporter/service.yaml \
 && kubectl create -f kubernetes-prometheus/clusterRole.yaml \
 && kubectl create -f kubernetes-prometheus/config-map.yaml \
 && kubectl create  -f kubernetes-prometheus/prometheus-deployment.yaml \
-&& kubectl create -f kubernetes-prometheus/prometheus-service.yaml --namespace=monitoring
+&& kubectl create -f kubernetes-prometheus/prometheus-service.yaml --namespace=monitoring \
+&& kubectl create -f kubernetes-grafana/grafana-datasource-config.yaml \
+&& kubectl create -f kubernetes-grafana/deployment.yaml \
+&& kubectl create -f kubernetes-grafana/service.yaml
 ```
