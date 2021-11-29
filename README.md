@@ -115,6 +115,7 @@ kubeadm join 192.168.1.26:6443 --token a1atea.qf2itw3jxdo4jkzd --discovery-token
 ## 9. Install Prometheus, Kube State Metrics,  Grafana, & Node Exporter - Master Node
 ```
 yum install git -y \
+&& rm -rf kubernetes-* \
 && git clone https://github.com/bibinwilson/kubernetes-node-exporter \
 && git clone https://github.com/bibinwilson/kubernetes-prometheus \
 && git clone https://github.com/bibinwilson/kubernetes-grafana.git \
