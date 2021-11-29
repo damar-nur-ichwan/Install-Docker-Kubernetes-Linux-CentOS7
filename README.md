@@ -97,6 +97,7 @@ Note: make sure you are on root
   && sudo chown $(id -u):$(id -g) $HOME/admin.conf \
   && export KUBECONFIG=$HOME/admin.conf \
   && kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml \
+  && kubectl taint nodes --all node-role.kubernetes.io/master- \
   && kubectl get nodes \
   && kubectl get pods -A \
   && kubeadm token create --print-join-command
