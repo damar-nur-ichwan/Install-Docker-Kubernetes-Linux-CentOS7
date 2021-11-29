@@ -65,13 +65,14 @@ sysctl --system \
   hostnamectl set-hostname worker1 \
   && ip a
 ```
-## 5. Add DNS Name - ALL Nodes
+## 5. View IP enp0s8 - All Nodes
 ```
-ifdown enp0s3 & ifup enp0s3
+ifdown enp0s8 & ifup enp0s8
 ```
 ```
 ip a
 ```
+## 6. Add DNS Name - All Nodes
 ```
 vi /etc/hosts
 ```
@@ -90,14 +91,14 @@ than press ESC ```:wq```
 
 ### *Open VM DEKSTOP*
 Note: make sure you are on root
-## 6. Init Kubernetes Master - Master Node
+## 7. Init Kubernetes Master - Master Node
 ```
   ifdown enp0s3 \
   && kubeadm init --pod-network-cidr=10.244.0.0/16 \
   && ifup enp0s3
 ```
 ### *Open CMD*
-## 7. Install Flannel & Get Kubeadm Join Token - Master Node
+## 8. Install Flannel & Get Kubeadm Join Token - Master Node
 ```
   sudo cp /etc/kubernetes/admin.conf $HOME/ \
   && sudo chown $(id -u):$(id -g) $HOME/admin.conf \
@@ -108,7 +109,7 @@ Note: make sure you are on root
   && kubectl get pods -A \
   && kubeadm token create --print-join-command
 ```
-## 8. Copy and Paste Kubadm Join Token from Master Node - Worker Nodes
+## 9. Copy and Paste Kubadm Join Token from Master Node - Worker Nodes
 
 ```
 kubeadm reset
@@ -118,7 +119,7 @@ contoh:
 kubeadm join 192.168.1.26:6443 --token a1atea.qf2itw3jxdo4jkzd --discovery-token-ca-cert-hash sha256:15cd536ceb9c4c3d4ea46d1a9bcd7816e45fbc3e58a6afec176d33a2ae9a865a
 ```
 
-## 9. Install Prometheus, Kube State Metrics,  Grafana, & Node Exporter - Master Node
+## 10. Install Prometheus, Kube State Metrics,  Grafana, & Node Exporter - Master Node
 ```
 yum install git -y \
 && rm -rf kubernetes-* \
