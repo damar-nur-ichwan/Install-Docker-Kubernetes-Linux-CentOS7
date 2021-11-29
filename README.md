@@ -112,17 +112,16 @@ kubeadm join 192.168.1.26:6443 --token a1atea.qf2itw3jxdo4jkzd --discovery-token
 ```
 
 ## 9. Install Prometheus, Kube State Metrics,  Grafana, & Node Exporter - Master Node
-clone
 ```
 yum install git -y \
+&& git clone https://github.com/bibinwilson/kubernetes-node-exporter \
 && git clone https://github.com/bibinwilson/kubernetes-prometheus \
 && git clone https://github.com/bibinwilson/kubernetes-grafana.git \
-&& git clone https://github.com/bibinwilson/kubernetes-node-exporter \
 && kubectl create namespace monitoring \
+&& kubectl apply -f kubernetes-node-exporter/
+&& kubectl apply -f kubernetes-grafana/ \
 && kubectl create -f kubernetes-prometheus/clusterRole.yaml \
 && kubectl create -f kubernetes-prometheus/config-map.yaml \
 && kubectl create  -f kubernetes-prometheus/prometheus-deployment.yaml \
-&& kubectl create -f kubernetes-prometheus/prometheus-service.yaml --namespace=monitoring \
-&& kubectl apply -f kubernetes-grafana/ \
-&& kubectl apply -f kubernetes-node-exporter/
+&& kubectl create -f kubernetes-prometheus/prometheus-service.yaml --namespace=monitoring
 ```
