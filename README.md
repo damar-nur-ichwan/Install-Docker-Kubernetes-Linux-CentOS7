@@ -118,7 +118,7 @@ yum install git -y \
 && git clone https://github.com/bibinwilson/kubernetes-prometheus \
 && git clone https://github.com/bibinwilson/kubernetes-grafana.git \
 && kubectl create namespace monitoring \
-&& kubectl apply -f kubernetes-node-exporter/
+&& kubectl apply -f kubernetes-node-exporter/ \
 && kubectl apply -f kubernetes-grafana/ \
 && kubectl create -f kubernetes-prometheus/clusterRole.yaml \
 && kubectl create -f kubernetes-prometheus/config-map.yaml \
