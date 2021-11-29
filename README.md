@@ -125,7 +125,6 @@ yum install git -y \
 && kubectl create -f kubernetes-grafana/deployment.yaml \
 && kubectl create -f kubernetes-grafana/service.yaml
 ```
-```
 check:
 ```
 kubectl get pod -A
