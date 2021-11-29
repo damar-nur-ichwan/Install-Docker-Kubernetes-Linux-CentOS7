@@ -4,7 +4,8 @@ Note: make sure you are on root
 ### *Open CMD*
 ## 0. Set Date & Time - All Nodes
 ```
-systemctl stop chronyd \
+yum remove ntp
+&& systemctl stop chronyd \
 && systemctl disable chronyd \
 && yum install -y ntp \
 && ntpdate -u id.pool.ntp.org \
@@ -13,7 +14,7 @@ systemctl stop chronyd \
 ```
 ## 1. Install Docker - All Nodes
 ```
-yum remove docker* -y \
+yum remove docker* yum-utils device-mapper-persistent-data lvm2 -y \
 && yum update -y \
 && yum install -y yum-utils device-mapper-persistent-data lvm2 \
 && yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo \
@@ -25,7 +26,7 @@ yum remove docker* -y \
 
 ## 2. Install Kubernetes - All Nodes
 ```
-yum remove kube* -y \
+yum remove kube* net-tools -y \
 && cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
@@ -53,7 +54,8 @@ sysctl --system \
 && setenforce 0 \
 && sed -i ‘s/^SELINUX=enforcing$/SELINUX=permissive/’ /etc/selinux/config \
 && sed -i '/swap/d' /etc/fstab \
-&& swapoff -a
+&& swapoff -a \
+&& ifdown enp0s8 & ifup enp0s8
 ```
 ## 3. Set Hostname && View IP enp0s8 - Master Node
 ```
@@ -65,18 +67,10 @@ sysctl --system \
   hostnamectl set-hostname worker1 \
   && ip a
 ```
-## 5. View IP enp0s8 - All Nodes
-```
-ifdown enp0s8 & ifup enp0s8
-```
-```
-ip a
-```
-## 6. Add DNS Name - All Nodes
+## 5. Add DNS Name - All Nodes
 ```
 vi /etc/hosts
 ```
-
 add
 ```
 <master public ip> master
@@ -89,7 +83,7 @@ example
 ```
 than press ESC ```:wq```
 
-### *Open VM DEKSTOP*
+### *Open VM DEKSTOP MASTER NODE*
 Note: make sure you are on root
 ## 7. Init Kubernetes Master - Master Node
 ```
@@ -110,10 +104,6 @@ Note: make sure you are on root
   && kubeadm token create --print-join-command
 ```
 ## 9. Copy and Paste Kubadm Join Token from Master Node - Worker Nodes
-
-```
-kubeadm reset
-```
 contoh:
 ```
 kubeadm join 192.168.1.26:6443 --token a1atea.qf2itw3jxdo4jkzd --discovery-token-ca-cert-hash sha256:15cd536ceb9c4c3d4ea46d1a9bcd7816e45fbc3e58a6afec176d33a2ae9a865a
