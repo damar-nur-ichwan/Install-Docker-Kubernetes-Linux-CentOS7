@@ -110,11 +110,11 @@ kubectl get pod -A
 ```
 yum install git -y \
 && rm -rf kubernetes-* \
-&& git clone https://github.com/devopscube/kube-state-metrics-configs.git \
+&& git clone https://github.com/kubernetes/kube-state-metrics.git \
 && git clone https://github.com/bibinwilson/kubernetes-prometheus \
 && git clone https://github.com/bibinwilson/kubernetes-grafana.git \
 && kubectl create namespace monitoring \
-&& kubectl apply -f kube-state-metrics-configs/ \
+&& kubectl apply -f kube-state-metrics/kubernetes \
 && kubectl create -f kubernetes-prometheus/clusterRole.yaml \
 && kubectl create -f kubernetes-prometheus/config-map.yaml \
 && kubectl create  -f kubernetes-prometheus/prometheus-deployment.yaml \
