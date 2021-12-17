@@ -106,7 +106,7 @@ check:
 ```
 kubectl get pod -A
 ```
-## 9. Install Prometheus, Kube State Metrics,  Grafana, & Node Exporter - Master Node
+## 9. Install Prometheus, Kube State Metrics,  & Grafana - Master Node
 ```
 kubectl create namespace monitoring \
 && yum install git -y \
