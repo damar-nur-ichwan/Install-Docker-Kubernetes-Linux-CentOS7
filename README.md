@@ -139,3 +139,10 @@ contoh:
 ```
 kubeadm join 192.168.1.26:6443 --token a1atea.qf2itw3jxdo4jkzd --discovery-token-ca-cert-hash sha256:15cd536ceb9c4c3d4ea46d1a9bcd7816e45fbc3e58a6afec176d33a2ae9a865a
 ```
+
+## NOTE: after login again - Master Node
+```
+  sudo cp /etc/kubernetes/admin.conf $HOME/ \
+  && sudo chown $(id -u):$(id -g) $HOME/admin.conf \
+  && export KUBECONFIG=$HOME/admin.conf
+```
