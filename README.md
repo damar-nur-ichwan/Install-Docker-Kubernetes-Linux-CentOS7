@@ -115,8 +115,8 @@ kubectl create namespace monitoring \
 && git clone https://github.com/kubernetes/kube-state-metrics.git \
 && git clone https://github.com/bibinwilson/kubernetes-prometheus \
 && git clone https://github.com/bibinwilson/kubernetes-grafana.git \
-&& kubectl create -f kube-state-metrics-configs/cluster-role-binding.yaml \
-&& kubectl create -f kube-state-metrics-configs/cluster-role.yaml \
+&& kubectl create -f kube-state-metrics/examples/standard/cluster-role-binding.yaml \
+&& kubectl create -f kube-state-metrics/examples/standard/cluster-role.yaml \
 && kubectl create -f kube-state-metrics-configs/service-account.yaml \
 && kubectl create -f kube-state-metrics-configs/service.yaml \
 && kubectl create -f kube-state-metrics/examples/standard/deployment.yaml \
