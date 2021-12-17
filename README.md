@@ -108,24 +108,26 @@ kubectl get pod -A
 ```
 ## 9. Install Prometheus, Kube State Metrics,  Grafana, & Node Exporter - Master Node
 ```
-yum install git -y \
-&& rm -rf kubernetes-* \
+kubectl create namespace monitoring \
+&& yum install git -y \
+&& rm -rf kube* \
+&& git clone https://github.com/devopscube/kube-state-metrics-configs.git \
 && git clone https://github.com/kubernetes/kube-state-metrics.git \
 && git clone https://github.com/bibinwilson/kubernetes-prometheus \
 && git clone https://github.com/bibinwilson/kubernetes-grafana.git \
-&& kubectl create namespace monitoring \
-&& kubectl apply -f kube-state-metrics/kubernetes \
+&& kubectl create -f kube-state-metrics-configs/cluster-role-binding.yaml \
+&& kubectl create -f kube-state-metrics-configs/cluster-role.yaml \
+&& kubectl create -f kube-state-metrics-configs/service-account.yaml \
+&& kubectl create -f kube-state-metrics-configs/service.yaml \
+&& kubectl create -f kube-state-metrics/examples/standard/deployment.yaml \
 && kubectl create -f kubernetes-prometheus/clusterRole.yaml \
 && kubectl create -f kubernetes-prometheus/config-map.yaml \
 && kubectl create  -f kubernetes-prometheus/prometheus-deployment.yaml \
 && kubectl create -f kubernetes-prometheus/prometheus-service.yaml --namespace=monitoring \
 && kubectl create -f kubernetes-grafana/grafana-datasource-config.yaml \
 && kubectl create -f kubernetes-grafana/deployment.yaml \
-&& kubectl create -f kubernetes-grafana/service.yaml
-```
-check:
-```
-kubectl get pod -A
+&& kubectl create -f kubernetes-grafana/service.yaml \
+&& kubectl get pod -A
 ```
 ## 10. Copy and Paste Kubadm Join Token from Master Node - Worker Nodes
 *copy from master node*
