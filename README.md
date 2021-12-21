@@ -106,20 +106,18 @@ check:
 ```
 kubectl get pod -A
 ```
-## 9. Install Prometheus, Kube State Metrics,  & Grafana - Master Node
+## 9. Install Prometheus, Kube State Metrics, Node Exporter,  & Grafana - Master Node
 ```
 kubectl create namespace monitoring \
 && yum install git -y \
 && rm -rf kube* \
 && git clone https://github.com/devopscube/kube-state-metrics-configs.git \
+&& git clone https://github.com/bibinwilson/kubernetes-node-exporter \
 && git clone https://github.com/kubernetes/kube-state-metrics.git \
 && git clone https://github.com/bibinwilson/kubernetes-prometheus \
 && git clone https://github.com/bibinwilson/kubernetes-grafana.git \
-&& kubectl create -f kube-state-metrics/examples/standard/cluster-role-binding.yaml \
-&& kubectl create -f kube-state-metrics/examples/standard/cluster-role.yaml \
-&& kubectl create -f kube-state-metrics-configs/service-account.yaml \
-&& kubectl create -f kube-state-metrics-configs/service.yaml \
-&& kubectl create -f kube-state-metrics/examples/standard/deployment.yaml \
+&& kubectl apply -f kube-state-metrics/examples/standard/ \
+&& kubectl apply -f kubernetes-node-exporter/ \
 && kubectl create -f kubernetes-prometheus/clusterRole.yaml \
 && kubectl create -f kubernetes-prometheus/config-map.yaml \
 && kubectl create  -f kubernetes-prometheus/prometheus-deployment.yaml \
