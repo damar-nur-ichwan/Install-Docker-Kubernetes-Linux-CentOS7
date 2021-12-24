@@ -1,4 +1,4 @@
-# Install-Docker-Kubernetes-Linux-CentOS7
+# Install Kubernetes on CentOS7
 
 Note: make sure you are on root
 ### *Open CMD*
